@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: guestbook
+    description: Guestbook operations
 paths:
   /healthz:
     get:
@@ -24,6 +26,44 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /guestbook:
+    get:
+      operationId: listGuestbookEntries
+      tags: [guestbook]
+      summary: List all guestbook entries
+      description: Returns all guestbook messages ordered by most recent first
+      responses:
+        "200":
+          description: List of guestbook entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GuestbookEntry"
+    post:
+      operationId: createGuestbookEntry
+      tags: [guestbook]
+      summary: Submit a guestbook message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GuestbookEntryInput"
+      responses:
+        "201":
+          description: Entry created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuestbookEntry"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +73,39 @@ components:
           type: string
       required:
         - status
-
+    GuestbookEntry:
+      type: object
+      required: [id, name, message, emoji, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        message:
+          type: string
+        emoji:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    GuestbookEntryInput:
+      type: object
+      required: [name, message]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        message:
+          type: string
+          minLength: 1
+          maxLength: 1000
+        emoji:
+          type: string
+          maxLength: 10
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
