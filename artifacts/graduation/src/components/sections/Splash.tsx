@@ -100,7 +100,7 @@ export function Splash({ onComplete }: SplashProps) {
             data-testid="button-enter"
           >
             <Sparkles className="w-5 h-5 group-hover:animate-spin" />
-            Vào trang
+           Go to page
           </motion.button>
 
           {/* Music hint */}
@@ -110,7 +110,7 @@ export function Splash({ onComplete }: SplashProps) {
             transition={{ duration: 0.6, delay: 1.8 }}
             className="mt-4 text-xs text-muted-foreground tracking-wide"
           >
-            🎵 Nhạc sẽ tự phát khi bạn vào
+            🎵 Music will automatically play when you log in.
           </motion.p>
         </motion.div>
       )}

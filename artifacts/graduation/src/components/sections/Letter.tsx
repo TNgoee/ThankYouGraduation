@@ -11,9 +11,7 @@ export function Letter() {
   return (
     <section className="py-24 bg-secondary/10 relative overflow-hidden flex items-center min-h-[70vh]">
       {/* Decorative watermark */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[400px] text-primary/[0.03] select-none pointer-events-none">
-        🎓
-      </div>
+     
 
       <div className="container mx-auto px-4 relative z-10 max-w-3xl">
         <motion.div
