@@ -1,5 +1,5 @@
 {
-    "buildCommand": "cd /vercel/path0/artifacts/api-server && pnpm run build",
-    "outputDirectory": "/vercel/path0/artifacts/api-server",
+    "buildCommand": "cd /vercel/path0/artifacts/graduation && pnpm install && pnpm run build",
+    "outputDirectory": "/vercel/path0/artifacts/graduation/dist",
     "installCommand": "pnpm install"
 }
