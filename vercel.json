@@ -1,10 +1,5 @@
 {
     "buildCommand": "cd /vercel/path0/artifacts/api-server && pnpm run build",
     "outputDirectory": "/vercel/path0/artifacts/api-server",
-    "installCommand": "pnpm install",
-    "functions": {
-        "api/index.ts": {
-            "runtime": "nodejs20.x"
-        }
-    }
+    "installCommand": "pnpm install"
 }
