@@ -1,6 +1,6 @@
 {
-    "buildCommand": "cd /vercel/path0/artifacts/graduation && pnpm install && pnpm run build",
-    "outputDirectory": "/vercel/path0/artifacts/graduation/dist/public",
+    "buildCommand": "pnpm --dir artifacts/graduation install && pnpm --dir artifacts/graduation build",
+    "outputDirectory": "artifacts/graduation/dist/public",
     "installCommand": "pnpm install",
     "framework": "vite"
 }
