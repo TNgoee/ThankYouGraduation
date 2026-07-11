@@ -1,58 +1,86 @@
 import { motion } from 'framer-motion';
 
 const appreciations = [
-  { num: 'I', title: 'Family', msg: 'Your unconditional love carried me through every moment of doubt. Thank you for believing in me when I couldn\u2019t.' },
-  { num: 'II', title: 'Friends', msg: 'You made the journey joyful, the hard times lighter, and every celebration brighter.' },
-  { num: 'III', title: 'Professors', msg: 'Your knowledge and guidance shaped how I think and who I am becoming.' },
-  { num: 'IV', title: 'Mentors', msg: 'Your wisdom pointed me forward when I couldn\u2019t see the path ahead.' },
-  { num: 'V', title: 'Classmates', msg: 'We learned together, struggled together, and now celebrate together.' },
-  { num: 'VI', title: 'Guests', msg: 'Thank you for taking the time to share in this milestone. Your presence means everything.' },
+  { emoji: '❤️', title: 'Family', msg: 'Your unconditional love carried me through every moment of doubt. Thank you for believing in me when I couldn\u2019t.', bg: 'from-[#FFD1E3] to-[#FFB8D4]' },
+  { emoji: '🌟', title: 'Friends', msg: 'You made the journey joyful, the hard times lighter, and every celebration brighter.', bg: 'from-[#FFE8B8] to-[#FFD48A]' },
+  { emoji: '📚', title: 'Professors', msg: 'Your knowledge and guidance shaped how I think and who I am becoming.', bg: 'from-[#D4E8FF] to-[#B8D4FF]' },
+  { emoji: '🧭', title: 'Mentors', msg: 'Your wisdom pointed me forward when I couldn\u2019t see the path ahead.', bg: 'from-[#E0D4FF] to-[#CBB8FF]' },
+  { emoji: '🎓', title: 'Classmates', msg: 'We learned together, struggled together, and now celebrate together.', bg: 'from-[#C9F2DC] to-[#A8E8C4]' },
+  { emoji: '🎉', title: 'Guests', msg: 'Thank you for taking the time to share in this milestone. Your presence means everything.', bg: 'from-[#FFDCC2] to-[#FFC299]' },
 ];
+
+const tilts = [-2, 1.5, -1, 2, -1.5, 1];
 
 export function Appreciation() {
   return (
-    <section id="appreciation" className="py-28 bg-background relative">
-      <div className="container mx-auto max-w-5xl px-6">
+    <section
+      id="appreciation"
+      className="py-28 relative overflow-hidden bg-gradient-to-b from-[#FFF6E9] via-[#FFF0F5] to-[#F3E9FF]"
+    >
+      {/* Soft blobs */}
+      <motion.div
+        animate={{ scale: [1, 1.15, 1] }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-[#FFD1E3]/40 blur-3xl"
+      />
+      <motion.div
+        animate={{ scale: [1, 1.2, 1] }}
+        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute -bottom-24 -left-20 w-80 h-80 rounded-full bg-[#D4C4FF]/40 blur-3xl"
+      />
+
+      <div className="container mx-auto max-w-6xl px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-20"
+          className="text-center mb-16"
         >
-          <p className="text-xs uppercase tracking-[0.3em] text-[#B8985A] mb-4">Gratitude</p>
-          <h2 className="text-4xl md:text-6xl font-serif font-bold text-foreground mb-6 tracking-tight">
+          <p className="text-sm font-semibold tracking-[0.2em] text-[#FF8FAE] mb-3">
+            💕 GRATITUDE
+          </p>
+          <h2 className="text-4xl md:text-6xl font-bold text-[#6B4A5C] mb-5">
             With Deepest Gratitude
           </h2>
-          <div className="w-14 h-px bg-[#B8985A] mx-auto mb-6" />
-          <p className="text-lg text-muted-foreground font-light">
+          <p className="text-lg text-[#9B7B95]">
             To the village that supported, guided, and celebrated with me
           </p>
         </motion.div>
 
-        <div className="divide-y divide-[#B8985A]/20 border-t border-b border-[#B8985A]/20">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {appreciations.map((item, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 30, rotate: 0 }}
+              whileInView={{ opacity: 1, y: 0, rotate: tilts[i] }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ delay: i * 0.06, duration: 0.6 }}
-              className="group grid grid-cols-[64px_1fr] md:grid-cols-[110px_180px_1fr] gap-4 md:gap-10 items-start py-10 md:py-12"
+              transition={{ delay: i * 0.08, duration: 0.6, ease: [0.34, 1.4, 0.64, 1] }}
+              whileHover={{ scale: 1.05, rotate: 0, y: -6 }}
+              className={`relative rounded-[2rem] bg-gradient-to-br ${item.bg} p-8 shadow-lg shadow-pink-100/60 border-2 border-white/60 cursor-default`}
+              data-testid={`appreciation-card-${i}`}
             >
-              {/* Roman numeral */}
-              <span className="font-serif text-4xl md:text-5xl text-[#B8985A]/50 group-hover:text-[#B8985A] transition-colors duration-500 leading-none">
-                {item.num}
-              </span>
+              {/* Emoji bubble */}
+              <motion.div
+                animate={{ rotate: [0, -8, 8, 0] }}
+                transition={{ duration: 4, repeat: Infinity, delay: i * 0.3, ease: 'easeInOut' }}
+                className="w-16 h-16 rounded-full bg-white/70 backdrop-blur flex items-center justify-center text-3xl mb-5 shadow-sm"
+              >
+                {item.emoji}
+              </motion.div>
 
-              {/* Title */}
-              <h3 className="font-serif text-2xl md:text-3xl font-semibold text-foreground tracking-tight col-span-2 md:col-span-1 -mt-1 md:mt-0">
-                {item.title}
-              </h3>
-
-              {/* Message */}
-              <p className="text-base md:text-lg leading-relaxed text-muted-foreground font-serif italic col-span-2 md:col-span-1">
+              <h3 className="text-2xl font-bold text-[#6B4A5C] mb-3">{item.title}</h3>
+              <p className="text-[15px] leading-relaxed text-[#7A5C72] italic">
                 "{item.msg}"
               </p>
+
+              {/* Little sparkle accent */}
+              <motion.span
+                animate={{ scale: [1, 1.3, 1], opacity: [0.6, 1, 0.6] }}
+                transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.2 }}
+                className="absolute top-5 right-6 text-lg"
+              >
+                ✨
+              </motion.span>
             </motion.div>
           ))}
         </div>
@@ -63,7 +91,9 @@ export function Appreciation() {
           viewport={{ once: true }}
           className="text-center mt-16"
         >
-          <p className="text-xs tracking-[0.3em] text-[#B8985A]">THANK YOU</p>
+          <p className="text-sm font-semibold tracking-[0.2em] text-[#FF8FAE]">
+            THANK YOU 🤍
+          </p>
         </motion.div>
       </div>
     </section>

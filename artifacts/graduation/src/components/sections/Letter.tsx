@@ -9,95 +9,113 @@ export function Letter() {
   ];
 
   return (
-    <section id="letter" className="relative py-28 bg-background overflow-hidden">
-      <div className="container mx-auto max-w-4xl px-6">
-        {/* Masthead */}
+    <section
+      id="letter"
+      className="relative py-28 overflow-hidden bg-gradient-to-b from-[#F3E9FF] via-[#FFF6E9] to-[#FFE5EC]"
+    >
+      {/* Soft blobs */}
+      <motion.div
+        animate={{ scale: [1, 1.15, 1] }}
+        transition={{ duration: 13, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute top-0 left-0 w-72 h-72 rounded-full bg-[#D4C4FF]/40 blur-3xl"
+      />
+      <motion.div
+        animate={{ scale: [1, 1.2, 1] }}
+        transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-[#FFC9DE]/40 blur-3xl"
+      />
+
+      <div className="container mx-auto max-w-2xl px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="text-center mb-4"
+          className="text-center mb-12"
         >
-          <p className="text-xs uppercase tracking-[0.3em] text-[#B8985A] mb-3">
-            A Personal Note
+          <p className="text-sm font-semibold tracking-[0.15em] text-[#FF8FAE] mb-3">
+            💌 A LITTLE NOTE FOR YOU
           </p>
-          <h2 className="font-serif text-4xl md:text-5xl font-bold text-foreground">
-            Words, Before I Go
+          <h2 className="text-4xl md:text-5xl font-bold text-[#6B4A5C]">
+            Before I Go...
           </h2>
         </motion.div>
 
+        {/* The note card — tilted, taped, handwritten feel */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 40, rotate: 0 }}
+          whileInView={{ opacity: 1, y: 0, rotate: -1.5 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-          className="flex items-center justify-center gap-3 mb-16 text-[11px] uppercase tracking-[0.2em] text-muted-foreground"
+          transition={{ duration: 0.8, ease: [0.34, 1.4, 0.64, 1] }}
+          className="relative bg-white/90 backdrop-blur rounded-[1.5rem] shadow-xl shadow-pink-200/50 border-2 border-white p-8 md:p-12"
         >
-          <span>Commencement Edition</span>
-          <span className="w-1 h-1 rounded-full bg-[#B8985A]" />
-          <span>2026</span>
-        </motion.div>
+          {/* Washi tape corners */}
+          <div className="absolute -top-4 left-8 w-16 h-7 bg-[#FFD1E3]/80 rotate-[-8deg] rounded-sm shadow-sm" />
+          <div className="absolute -top-4 right-10 w-16 h-7 bg-[#D4E8FF]/80 rotate-[6deg] rounded-sm shadow-sm" />
 
-        {/* Top and bottom rules — bracket the article like a magazine spread */}
-        <div className="border-t border-b border-[#B8985A]/25 py-14 md:py-16">
-          {/* Editorial two-column body */}
+          {/* Heart wax seal */}
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            animate={{ rotate: [0, -6, 6, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -top-7 left-1/2 -translate-x-1/2 w-14 h-14 rounded-full bg-gradient-to-br from-[#FF8FAE] to-[#FF6B9D] flex items-center justify-center shadow-lg shadow-pink-300/60 border-2 border-white"
+          >
+            <span className="text-xl">💗</span>
+          </motion.div>
+
+          <div className="space-y-5 mt-4">
+            {paragraphs.map((text, i) => (
+              <motion.p
+                key={i}
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15, duration: 0.6 }}
+                className={`text-[16px] md:text-[17px] leading-8 text-[#6B4A5C] ${
+                  i === paragraphs.length - 1 ? 'font-semibold' : ''
+                }`}
+              >
+                {i === 0 && <span className="mr-1">🌸</span>}
+                {text}
+              </motion.p>
+            ))}
+          </div>
+
+          {/* Little dashed divider like a note ending */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.7 }}
+            className="border-t-2 border-dashed border-[#FFD1E3] my-8"
+          />
+
+          {/* Signature */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="columns-1 md:columns-2 gap-x-12 [column-rule:1px_solid_theme(colors.border/40%)]"
+            transition={{ delay: 0.8 }}
+            className="text-right"
           >
-            {/* First paragraph with drop cap */}
-            <p className="text-[17px] leading-8 text-foreground/80 font-serif mb-6 [text-align:justify] break-inside-avoid">
-              <span className="float-left font-serif text-6xl leading-[0.85] text-[#B8985A] pr-2 pt-1">
-                {paragraphs[0].charAt(0)}
-              </span>
-              {paragraphs[0].slice(1)}
-            </p>
-
-            {/* Pull quote — sits inline within the column flow */}
-            <blockquote className="break-inside-avoid my-8 py-1">
-              <div className="w-8 h-px bg-[#B8985A] mb-4" />
-              <p className="font-serif italic text-xl leading-relaxed text-foreground">
-                "{paragraphs[1].split('.')[0]}."
-              </p>
-              <div className="w-8 h-px bg-[#B8985A] mt-4" />
-            </blockquote>
-
-            <p className="text-[17px] leading-8 text-foreground/80 font-serif mb-6 [text-align:justify] break-inside-avoid">
-              {paragraphs[1]}
-            </p>
-
-            <p className="text-[17px] leading-8 text-foreground/80 font-serif mb-6 [text-align:justify] break-inside-avoid">
-              {paragraphs[2]}
-            </p>
-
-            <p className="text-[17px] leading-8 text-foreground font-serif font-medium break-inside-avoid">
-              {paragraphs[3]}
+            <p className="text-[#9B7B95] text-sm mb-1">With all my heart,</p>
+            <p className="text-2xl font-bold text-[#FF6B9D]">
+              The Graduate 🎓
             </p>
           </motion.div>
-        </div>
-
-        {/* Signature + page footer */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-          className="mt-10 flex items-end justify-between"
-        >
-          <div>
-            <p className="text-muted-foreground italic text-sm mb-1">With gratitude,</p>
-            <h3 className="font-serif text-2xl font-semibold text-[#B8985A]">
-              The Graduate
-            </h3>
-          </div>
-          <p className="font-serif text-sm text-muted-foreground tracking-widest">
-            — 04 —
-          </p>
         </motion.div>
+
+        {/* Little floating hearts under the card */}
+        <div className="flex justify-center gap-3 mt-8">
+          {['💕', '✨', '💌'].map((e, i) => (
+            <motion.span
+              key={i}
+              animate={{ y: [0, -6, 0] }}
+              transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3, ease: 'easeInOut' }}
+              className="text-xl"
+            >
+              {e}
+            </motion.span>
+          ))}
+        </div>
       </div>
     </section>
   );

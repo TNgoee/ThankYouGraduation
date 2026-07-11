@@ -1,6 +1,6 @@
 import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
 import { useTheme } from 'next-themes';
-import { Moon, Sun, ArrowUp } from 'lucide-react';
+import { Moon, Sun, ArrowUp, Heart } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const navItems = [
@@ -22,12 +22,12 @@ export function Navbar() {
   });
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 80);
+    const handleScroll = () => setIsScrolled(window.scrollY > 60);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Scroll-spy: highlight the nav item for the section in view
+  // Scroll spy
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -56,50 +56,55 @@ export function Navbar() {
 
   return (
     <>
-      {/* Progress bar — thin gold line instead of flat primary block */}
+      {/* Sweet progress bar */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#B8985A] via-[#D4AF6A] to-[#B8985A] z-50 origin-left"
+        className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-pink-400 via-rose-400 to-amber-400 z-50 origin-left"
         style={{ scaleX }}
       />
 
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
           isScrolled
-            ? 'bg-background/90 backdrop-blur-md border-b border-[#B8985A]/20 shadow-sm'
+            ? 'bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl border-b border-pink-200/60 dark:border-pink-900/50 shadow-sm'
             : 'bg-transparent'
         }`}
       >
         <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-          {/* Brand mark */}
+          {/* Brand - Sweet style */}
           <button
             onClick={scrollToTop}
-            className="font-serif text-xl tracking-[0.15em] text-foreground group"
-            data-testid="nav-brand"
+            className="flex items-center gap-2 group"
           >
-            <span className="text-[#B8985A]">CLASS OF</span>{' '}
-            <span className="font-semibold">2026</span>
+            <div className="w-8 h-8 rounded-2xl bg-gradient-to-br from-pink-400 to-rose-400 flex items-center justify-center text-white shadow-md group-hover:rotate-12 transition-transform">
+              ❤️
+            </div>
+            <div className="font-serif text-2xl tracking-tight">
+              <span className="text-pink-500">Class of </span>
+              <span className="font-bold text-rose-500">2026</span>
+            </div>
           </button>
 
-          {/* Nav links with active underline */}
-          <div className="hidden md:flex items-center gap-1">
+          {/* Navigation - Cute & Soft */}
+          <div className="hidden md:flex items-center gap-2">
             {navItems.map((item) => {
               const isActive = activeSection === item.id;
               return (
                 <button
                   key={item.id}
                   onClick={() => scrollTo(item.id)}
-                  className="relative px-4 py-2 text-[13px] uppercase tracking-[0.12em] font-medium text-foreground/70 hover:text-foreground transition-colors"
-                  data-testid={`nav-link-${item.id}`}
+                  className="relative px-6 py-2.5 text-sm font-medium rounded-2xl hover:bg-pink-100 dark:hover:bg-pink-950/50 transition-all active:scale-95"
                 >
-                  {item.label}
+                  <span className={`transition-colors ${isActive ? 'text-pink-600 dark:text-pink-400' : 'text-foreground/70 hover:text-pink-600 dark:hover:text-pink-400'}`}>
+                    {item.label}
+                  </span>
+                  
                   {isActive && (
                     <motion.span
-                      layoutId="nav-underline"
-                      className="absolute left-4 right-4 -bottom-0.5 h-[1.5px] bg-[#B8985A]"
-                      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                      layoutId="nav-dot"
+                      className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-pink-500 rounded-full"
                     />
                   )}
                 </button>
@@ -107,46 +112,43 @@ export function Navbar() {
             })}
           </div>
 
-          {/* Theme toggle — pill switch instead of stacked icons */}
-          <button
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="relative w-14 h-7 rounded-full border border-[#B8985A]/40 bg-foreground/5 flex items-center px-1"
-            data-testid="button-theme-toggle"
-          >
-            <motion.div
-              className="w-5 h-5 rounded-full bg-[#B8985A] flex items-center justify-center"
-              animate={{ x: theme === 'dark' ? 26 : 0 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+          {/* Theme Toggle + Heart accent */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="w-10 h-10 flex items-center justify-center rounded-2xl hover:bg-pink-100 dark:hover:bg-pink-950/50 transition-colors"
             >
               {theme === 'dark' ? (
-                <Moon className="h-3 w-3 text-background" />
+                <Sun className="w-5 h-5 text-amber-400" />
               ) : (
-                <Sun className="h-3 w-3 text-background" />
+                <Moon className="w-5 h-5 text-pink-500" />
               )}
-            </motion.div>
-            <span className="sr-only">Toggle theme</span>
-          </button>
+            </button>
+
+            {/* Cute heart accent */}
+            <div className="hidden md:block w-px h-6 bg-pink-200/70 dark:bg-pink-900" />
+            
+            <button
+              onClick={scrollToTop}
+              className="hidden md:flex items-center justify-center w-10 h-10 rounded-2xl hover:bg-pink-100 dark:hover:bg-pink-950/50 text-pink-400 hover:text-pink-500 transition-colors"
+            >
+              <Heart className="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </motion.nav>
 
-      {/* Back to top — minimal outlined circle, label fades in on hover */}
+      {/* Back to top - Super cute */}
       <AnimatePresence>
         {isScrolled && (
           <motion.button
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 12 }}
-            transition={{ duration: 0.25 }}
+            initial={{ opacity: 0, scale: 0.6 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.6 }}
             onClick={scrollToTop}
-            className="group fixed bottom-8 right-8 z-40 flex items-center gap-2 pl-4 pr-1 py-1 rounded-full border border-[#B8985A]/40 bg-background/90 backdrop-blur-md shadow-md hover:border-[#B8985A] transition-colors"
-            data-testid="button-back-to-top"
+            className="fixed bottom-8 right-8 z-50 group flex items-center justify-center w-14 h-14 rounded-3xl bg-white dark:bg-zinc-900 shadow-lg border border-pink-200 dark:border-pink-900 hover:border-pink-400 hover:scale-110 active:scale-95 transition-all duration-300"
           >
-            <span className="text-[11px] uppercase tracking-[0.1em] text-foreground/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 max-w-0 group-hover:max-w-[80px] overflow-hidden whitespace-nowrap">
-              Top
-            </span>
-            <span className="w-8 h-8 rounded-full bg-[#B8985A] flex items-center justify-center shrink-0">
-              <ArrowUp className="h-4 w-4 text-background" />
-            </span>
+            <ArrowUp className="w-6 h-6 text-pink-500 group-hover:-translate-y-0.5 transition-transform" />
           </motion.button>
         )}
       </AnimatePresence>

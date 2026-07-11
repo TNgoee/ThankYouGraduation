@@ -5,14 +5,18 @@ interface SplashProps {
   onComplete: () => void;
 }
 
+const floaties = ['💕', '✨', '🎀', '⭐', '🌸'];
+
 export function Splash({ onComplete }: SplashProps) {
   const [show, setShow] = useState(true);
   const [leaving, setLeaving] = useState(false);
+  const [burst, setBurst] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const handleEnter = () => {
     if (leaving) return;
     setLeaving(true);
+    setBurst(true);
 
     const audio = new Audio('/Cảm Ơn Người Đã Thức Cùng Tôi.mp3');
     audio.loop = true;
@@ -23,7 +27,7 @@ export function Splash({ onComplete }: SplashProps) {
     setTimeout(() => {
       setShow(false);
       setTimeout(onComplete, 800);
-    }, 200);
+    }, 500);
   };
 
   return (
@@ -33,104 +37,155 @@ export function Splash({ onComplete }: SplashProps) {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: 'easeInOut' }}
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background overflow-hidden"
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-[#FFE5EC] via-[#FFF6E9] to-[#E8D9FF]"
         >
-          {/* Fine gold vignette frame — reads as "ceremony" not "app splash" */}
-          <div className="absolute inset-4 md:inset-8 border border-[#B8985A]/25 pointer-events-none" />
-          <div className="absolute inset-6 md:inset-10 border border-[#B8985A]/10 pointer-events-none" />
+          {/* Soft blob shapes in the background */}
+          <motion.div
+            animate={{ scale: [1, 1.15, 1], rotate: [0, 8, 0] }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -top-20 -left-24 w-72 h-72 rounded-full bg-[#FFC9DE]/50 blur-3xl"
+          />
+          <motion.div
+            animate={{ scale: [1, 1.2, 1], rotate: [0, -10, 0] }}
+            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -bottom-24 -right-16 w-80 h-80 rounded-full bg-[#D4C4FF]/50 blur-3xl"
+          />
+          <motion.div
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute top-1/3 right-1/4 w-40 h-40 rounded-full bg-[#FFF0B8]/50 blur-2xl"
+          />
 
-          {/* Drifting gold motes, replacing generic blur circles */}
+          {/* Floating cute emojis drifting up */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            {[...Array(14)].map((_, i) => (
-              <motion.div
+            {[...Array(18)].map((_, i) => (
+              <motion.span
                 key={i}
-                className="absolute w-1 h-1 rounded-full bg-[#B8985A]/50"
-                initial={{
-                  x: Math.random() * window.innerWidth,
-                  y: window.innerHeight + 20,
-                  opacity: 0,
-                }}
+                className="absolute text-2xl"
+                style={{ left: `${Math.random() * 100}%` }}
+                initial={{ y: window.innerHeight + 40, opacity: 0, rotate: 0 }}
                 animate={{
-                  y: -20,
-                  opacity: [0, 0.6, 0],
+                  y: -60,
+                  opacity: [0, 1, 1, 0],
+                  rotate: [0, Math.random() > 0.5 ? 25 : -25, 0],
+                  x: [0, Math.random() * 40 - 20, 0],
                 }}
                 transition={{
-                  duration: Math.random() * 6 + 6,
+                  duration: Math.random() * 5 + 6,
                   repeat: Infinity,
-                  delay: Math.random() * 4,
-                  ease: 'linear',
+                  delay: Math.random() * 5,
+                  ease: 'easeInOut',
                 }}
-              />
+              >
+                {floaties[i % floaties.length]}
+              </motion.span>
             ))}
           </div>
 
-          {/* Seal / crest — SVG laurel instead of an emoji cap */}
+          {/* Confetti burst on enter */}
+          <AnimatePresence>
+            {burst && (
+              <div className="absolute inset-0 pointer-events-none">
+                {[...Array(30)].map((_, i) => (
+                  <motion.span
+                    key={i}
+                    className="absolute text-xl"
+                    style={{ left: '50%', top: '55%' }}
+                    initial={{ x: 0, y: 0, opacity: 1, scale: 0.6 }}
+                    animate={{
+                      x: (Math.random() - 0.5) * 500,
+                      y: (Math.random() - 0.5) * 500 - 100,
+                      opacity: 0,
+                      scale: 1,
+                      rotate: Math.random() * 360,
+                    }}
+                    transition={{ duration: 1, ease: 'easeOut' }}
+                  >
+                    {floaties[i % floaties.length]}
+                  </motion.span>
+                ))}
+              </div>
+            )}
+          </AnimatePresence>
+
+          {/* Cute badge */}
           <motion.div
-            initial={{ scale: 0.85, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-8"
+            initial={{ scale: 0.6, opacity: 0, rotate: -8 }}
+            animate={{ scale: 1, opacity: 1, rotate: 0 }}
+            transition={{ duration: 0.8, ease: [0.34, 1.56, 0.64, 1] }}
+            className="relative mb-6"
           >
-            <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
-              <circle cx="36" cy="36" r="34" stroke="#B8985A" strokeWidth="1" opacity="0.5" />
-              <circle cx="36" cy="36" r="27" stroke="#B8985A" strokeWidth="1" opacity="0.3" />
-              <path
-                d="M36 20 L40 32 L52 32 L42 39 L46 51 L36 44 L26 51 L30 39 L20 32 L32 32 Z"
-                fill="#B8985A"
-                opacity="0.9"
-              />
-            </svg>
+            <motion.div
+              animate={{ rotate: [0, -6, 6, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              className="w-24 h-24 rounded-full bg-gradient-to-br from-[#FFD1E3] to-[#FFB8D4] shadow-lg shadow-pink-200/60 flex items-center justify-center border-4 border-white/70"
+            >
+              <span className="text-5xl">🎓</span>
+            </motion.div>
+            <motion.span
+              animate={{ scale: [1, 1.3, 1], rotate: [0, 15, 0] }}
+              transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+              className="absolute -top-1 -right-1 text-xl"
+            >
+              ✨
+            </motion.span>
+            <motion.span
+              animate={{ scale: [1, 1.3, 1] }}
+              transition={{ duration: 2.4, repeat: Infinity, delay: 1 }}
+              className="absolute -bottom-1 -left-2 text-lg"
+            >
+              💫
+            </motion.span>
           </motion.div>
 
-          {/* Headline */}
-          <div className="space-y-1.5 text-center mb-3 px-6">
-            {['Thank You', 'for Being Part of', 'My Graduation Journey'].map((line, i) => (
+          {/* Headline — playful, rounded, gently tilted lines */}
+          <div className="space-y-0.5 text-center mb-2 px-6">
+            {['Thank You', 'for Being Part of', 'My Graduation Journey 🌷'].map((line, i) => (
               <motion.h1
                 key={line}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 + i * 0.25 }}
-                className="text-2xl md:text-4xl font-serif text-foreground font-medium tracking-wide"
+                initial={{ opacity: 0, y: 14, rotate: i % 2 === 0 ? -2 : 2 }}
+                animate={{ opacity: 1, y: 0, rotate: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 + i * 0.2, ease: 'easeOut' }}
+                className="text-2xl md:text-4xl font-bold text-[#6B4A5C]"
               >
                 {line}
               </motion.h1>
             ))}
           </div>
 
-          {/* Gold divider */}
-          <motion.div
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: 48, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 1.15 }}
-            className="h-px bg-[#B8985A] mb-10"
-          />
-
-          {/* Enter button — outlined pill, matches navbar language */}
-          <motion.button
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.4 }}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={handleEnter}
-            disabled={leaving}
-            className="group relative px-10 py-3.5 rounded-full border border-[#B8985A] text-foreground font-serif text-base tracking-[0.08em] overflow-hidden disabled:opacity-60"
-            data-testid="button-enter"
-          >
-            <span className="absolute inset-0 bg-[#B8985A] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-out" />
-            <span className="relative z-10 group-hover:text-background transition-colors duration-300">
-              Enter
-            </span>
-          </motion.button>
-
-          {/* Music hint */}
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 1.8 }}
-            className="mt-5 text-xs text-muted-foreground tracking-wide"
+            transition={{ delay: 1.1 }}
+            className="text-sm text-[#9B7B95] mb-9"
           >
-            Music will begin softly once you enter.
+            made with love, just for you 🤍
+          </motion.p>
+
+          {/* Enter button — candy pill, bouncy */}
+          <motion.button
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.3 }}
+            whileHover={{ scale: 1.06, rotate: -1 }}
+            whileTap={{ scale: 0.94 }}
+            onClick={handleEnter}
+            disabled={leaving}
+            className="relative px-10 py-4 rounded-full bg-gradient-to-r from-[#FFAFC5] to-[#FFC9A8] text-white font-bold text-lg shadow-lg shadow-pink-200/70 disabled:opacity-70"
+            data-testid="button-enter"
+          >
+            <span className="flex items-center gap-2">
+              Let's Begin <span className="text-xl">🎉</span>
+            </span>
+          </motion.button>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1.7 }}
+            className="mt-5 text-xs text-[#9B7B95] tracking-wide"
+          >
+            🎵 a little song will play once you enter
           </motion.p>
         </motion.div>
       )}
