@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState, useRef } from 'react';
+import { Sparkles } from 'lucide-react';
 
 interface SplashProps {
   onComplete: () => void;
@@ -7,14 +8,26 @@ interface SplashProps {
 
 export function Splash({ onComplete }: SplashProps) {
   const [show, setShow] = useState(true);
+  const [leaving, setLeaving] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
+  const handleEnter = () => {
+    if (leaving) return;
+    setLeaving(true);
+
+    // Start music — browsers allow autoplay only after user gesture
+    const audio = new Audio('/Cảm Ơn Người Đã Thức Cùng Tôi.mp3');
+    audio.loop = true;
+    audio.volume = 0.5;
+    audio.play().catch(() => {/* silently ignore if blocked */});
+    audioRef.current = audio;
+
+    // Fade out splash then unmount
+    setTimeout(() => {
       setShow(false);
-      setTimeout(onComplete, 1000); // Wait for exit animation
-    }, 2500);
-    return () => clearTimeout(timer);
-  }, [onComplete]);
+      setTimeout(onComplete, 800);
+    }, 200);
+  };
 
   return (
     <AnimatePresence>
@@ -22,10 +35,10 @@ export function Splash({ onComplete }: SplashProps) {
         <motion.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1, ease: 'easeInOut' }}
+          transition={{ duration: 0.8, ease: 'easeInOut' }}
           className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background"
         >
-          {/* Glowing background particles could go here */}
+          {/* Floating particles */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {[...Array(20)].map((_, i) => (
               <motion.div
@@ -43,34 +56,62 @@ export function Splash({ onComplete }: SplashProps) {
                 transition={{
                   duration: Math.random() * 3 + 2,
                   repeat: Infinity,
-                  ease: "linear"
+                  ease: 'linear',
                 }}
               />
             ))}
           </div>
 
+          {/* Graduation cap */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-primary text-8xl mb-8"
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+            className="text-8xl mb-8"
           >
             🎓
           </motion.div>
 
-          <div className="space-y-2 text-center">
-            {["Thank You", "for Being Part of", "My Graduation Journey"].map((line, i) => (
+          {/* Headline */}
+          <div className="space-y-2 text-center mb-12">
+            {['Thank You', 'for Being Part of', 'My Graduation Journey'].map((line, i) => (
               <motion.h1
                 key={line}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 + i * 0.3 }}
+                transition={{ duration: 0.6, delay: 0.4 + i * 0.25 }}
                 className="text-2xl md:text-4xl font-serif text-foreground font-medium"
               >
                 {line}
               </motion.h1>
             ))}
           </div>
+
+          {/* Enter button */}
+          <motion.button
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.4 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={handleEnter}
+            disabled={leaving}
+            className="group flex items-center gap-2 px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold text-lg shadow-lg hover:bg-primary/90 transition-colors disabled:opacity-60"
+            data-testid="button-enter"
+          >
+            <Sparkles className="w-5 h-5 group-hover:animate-spin" />
+            Vào trang
+          </motion.button>
+
+          {/* Music hint */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1.8 }}
+            className="mt-4 text-xs text-muted-foreground tracking-wide"
+          >
+            🎵 Nhạc sẽ tự phát khi bạn vào
+          </motion.p>
         </motion.div>
       )}
     </AnimatePresence>
