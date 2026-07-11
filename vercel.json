@@ -1,6 +1,6 @@
 {
-    "buildCommand": "pnpm --dir artifacts/graduation install && pnpm --dir artifacts/graduation build",
-    "outputDirectory": "artifacts/graduation/dist/public",
+    "framework": "vite",
     "installCommand": "pnpm install",
-    "framework": "vite"
+    "buildCommand": "pnpm --filter @workspace/graduation build",
+    "outputDirectory": "artifacts/graduation/dist"
 }
