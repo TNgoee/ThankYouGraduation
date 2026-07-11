@@ -100,7 +100,7 @@ export function Splash({ onComplete }: SplashProps) {
             data-testid="button-enter"
           >
             <Sparkles className="w-5 h-5 group-hover:animate-spin" />
-           Go to page
+           Go to page ok
           </motion.button>
 
           {/* Music hint */}
