@@ -18,7 +18,7 @@ export function Splash({ onComplete }: SplashProps) {
     setLeaving(true);
     setBurst(true);
 
-    const audio = new Audio('/Cảm Ơn Người Đã Thức Cùng Tôi.mp3');
+    const audio = new Audio('\A Little Dream Of Me - Lyrics Video - Cảm Ơn Người Đã Thức Cùng Tôi.mp3');
     audio.loop = true;
     audio.volume = 0.5;
     audio.play().catch(() => {});
