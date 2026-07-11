@@ -8,98 +8,119 @@ export function Celebrate() {
   const [celebrated, setCelebrated] = useState(false);
 
   const handleCelebrate = () => {
+    if (celebrated) return;
+    
     setCelebrated(true);
     
-    const duration = 3000;
+    const duration = 3500;
     const end = Date.now() + duration;
 
     const frame = () => {
       confetti({
-        particleCount: 5,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0 },
-        colors: ['#C9A84C', '#0A1628', '#ffffff']
+        particleCount: 6,
+        spread: 60,
+        origin: { x: 0.2, y: 0.6 },
+        colors: ['#C9A84C', '#1F2937', '#E5E7EB']
       });
       confetti({
-        particleCount: 5,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1 },
-        colors: ['#C9A84C', '#0A1628', '#ffffff']
+        particleCount: 6,
+        spread: 60,
+        origin: { x: 0.8, y: 0.6 },
+        colors: ['#C9A84C', '#1F2937', '#E5E7EB']
       });
 
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
-      }
+      if (Date.now() < end) requestAnimationFrame(frame);
     };
     frame();
   };
 
   return (
-    <section id="celebrate" className="py-32 relative overflow-hidden flex items-center justify-center min-h-[60vh]">
-      <motion.div 
-        animate={{ 
-          backgroundColor: celebrated ? 'hsl(var(--primary) / 0.1)' : 'transparent',
-        }}
-        className="absolute inset-0 transition-colors duration-1000"
-      />
-      
+    <section id="celebrate" className="py-28 md:py-40 relative overflow-hidden">
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="max-w-2xl mx-auto text-center">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="text-primary text-sm tracking-[4px] font-medium mb-4">THE MOMENT</div>
+            <h2 className="text-5xl md:text-7xl font-serif font-bold tracking-tighter mb-8">
+              Let’s Celebrate This Achievement
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Because success is better when shared
+            </p>
+          </motion.div>
+
+          {/* Main Action */}
+          <div className="mt-16 mb-20">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <Button
+                onClick={handleCelebrate}
+                disabled={celebrated}
+                className="group relative h-28 w-28 md:h-32 md:w-32 rounded-full border-4 border-primary/20 hover:border-primary bg-background hover:bg-primary hover:text-primary-foreground transition-all duration-700 text-5xl shadow-xl"
+              >
+                <span className="transition-transform group-hover:rotate-12">🎉</span>
+              </Button>
+            </motion.div>
+            
+            <p className="mt-6 text-sm tracking-widest text-muted-foreground">
+              {celebrated ? "CELEBRATING..." : "TAP TO CELEBRATE"}
+            </p>
+          </div>
+
+          {/* Thank You Message */}
+          {celebrated && (
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-6"
+            >
+              <div className="text-4xl md:text-5xl font-serif leading-tight text-foreground">
+                Thank you for being part of<br />
+                this beautiful journey
+              </div>
+              <p className="text-lg text-muted-foreground max-w-md mx-auto">
+                Your presence made this graduation truly meaningful
+              </p>
+            </motion.div>
+          )}
+        </div>
+      </div>
+
+      {/* Floating subtle elements */}
       {celebrated && (
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(6)].map((_, i) => (
+        <div className="absolute inset-0 pointer-events-none">
+          {[...Array(5)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute text-5xl opacity-40"
-              initial={{
+              initial={{ 
+                opacity: 0.6, 
+                scale: 0.6,
                 x: Math.random() * window.innerWidth,
-                y: window.innerHeight + 100,
-                rotate: 0
+                y: window.innerHeight * 0.7
               }}
-              animate={{
-                y: -200,
-                rotate: 360
+              animate={{ 
+                y: -150,
+                opacity: 0,
+                scale: 1.2
               }}
               transition={{
-                duration: 5 + Math.random() * 5,
-                ease: "easeOut",
+                duration: 4 + Math.random() * 3,
+                delay: i * 0.15,
               }}
+              className="absolute text-6xl"
             >
-              {['🎈', '🎉', '🎓'][i % 3]}
+              {['✨', '🎓', '🌟'][i % 3]}
             </motion.div>
           ))}
         </div>
       )}
-
-      <div className="container mx-auto px-4 relative z-10 text-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="max-w-2xl mx-auto"
-        >
-          <h2 className="text-4xl md:text-6xl font-serif font-bold text-foreground mb-8">Celebrate Together</h2>
-          
-          <Button
-            size="lg"
-            onClick={handleCelebrate}
-            className="text-2xl px-12 py-8 rounded-full shadow-xl hover:scale-105 transition-all duration-300 bg-primary text-primary-foreground mb-12"
-            data-testid="button-celebrate"
-          >
-            🎉 Celebrate!
-          </Button>
-
-          {celebrated && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-2xl md:text-4xl font-serif text-primary font-medium"
-            >
-              Thank You for Making My Graduation Day Truly Special!
-            </motion.div>
-          )}
-        </motion.div>
-      </div>
     </section>
   );
 }

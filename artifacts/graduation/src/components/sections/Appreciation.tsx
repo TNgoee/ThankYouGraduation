@@ -1,51 +1,70 @@
 import { motion } from 'framer-motion';
-import { Card, CardContent } from '@/components/ui/card';
 
 const appreciations = [
-  { icon: "❤️", title: "Family", msg: "Your unconditional love carried me through every moment of doubt. Thank you for believing in me when I couldn't." },
-  { icon: "🌟", title: "Friends", msg: "You made the journey joyful, the hard times lighter, and every celebration brighter." },
-  { icon: "👨‍🏫", title: "Professors", msg: "Your knowledge and guidance shaped how I think and who I am becoming." },
-  { icon: "🧭", title: "Mentors", msg: "Your wisdom pointed me forward when I couldn't see the path ahead." },
-  { icon: "🎓", title: "Classmates", msg: "We learned together, struggled together, and now celebrate together." },
-  { icon: "🎉", title: "Guests", msg: "Thank you for taking the time to share in this milestone. Your presence means everything." }
+  { num: 'I', title: 'Family', msg: 'Your unconditional love carried me through every moment of doubt. Thank you for believing in me when I couldn\u2019t.' },
+  { num: 'II', title: 'Friends', msg: 'You made the journey joyful, the hard times lighter, and every celebration brighter.' },
+  { num: 'III', title: 'Professors', msg: 'Your knowledge and guidance shaped how I think and who I am becoming.' },
+  { num: 'IV', title: 'Mentors', msg: 'Your wisdom pointed me forward when I couldn\u2019t see the path ahead.' },
+  { num: 'V', title: 'Classmates', msg: 'We learned together, struggled together, and now celebrate together.' },
+  { num: 'VI', title: 'Guests', msg: 'Thank you for taking the time to share in this milestone. Your presence means everything.' },
 ];
 
 export function Appreciation() {
   return (
-    <section id="appreciation" className="py-24 bg-background relative overflow-hidden">
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
-      <div className="container mx-auto px-4 relative z-10">
+    <section id="appreciation" className="py-28 bg-background relative">
+      <div className="container mx-auto max-w-5xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
-          <h2 className="text-3xl md:text-5xl font-serif font-bold text-foreground mb-4">With Deepest Gratitude</h2>
-          <p className="text-muted-foreground text-lg">To the village that made this possible</p>
+          <p className="text-xs uppercase tracking-[0.3em] text-[#B8985A] mb-4">Gratitude</p>
+          <h2 className="text-4xl md:text-6xl font-serif font-bold text-foreground mb-6 tracking-tight">
+            With Deepest Gratitude
+          </h2>
+          <div className="w-14 h-px bg-[#B8985A] mx-auto mb-6" />
+          <p className="text-lg text-muted-foreground font-light">
+            To the village that supported, guided, and celebrated with me
+          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="divide-y divide-[#B8985A]/20 border-t border-b border-[#B8985A]/20">
           {appreciations.map((item, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ delay: i * 0.06, duration: 0.6 }}
+              className="group grid grid-cols-[64px_1fr] md:grid-cols-[110px_180px_1fr] gap-4 md:gap-10 items-start py-10 md:py-12"
             >
-              <Card className="h-full bg-background/80 backdrop-blur border-primary/10 hover:border-primary/30 transition-colors">
-                <CardContent className="pt-8 text-center px-6 pb-8">
-                  <div className="text-5xl mb-6 bg-primary/5 w-20 h-20 mx-auto rounded-full flex items-center justify-center text-primary border border-primary/20">
-                    {item.icon}
-                  </div>
-                  <h3 className="text-xl font-bold font-serif mb-4 text-foreground">{item.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed italic">{item.msg}</p>
-                </CardContent>
-              </Card>
+              {/* Roman numeral */}
+              <span className="font-serif text-4xl md:text-5xl text-[#B8985A]/50 group-hover:text-[#B8985A] transition-colors duration-500 leading-none">
+                {item.num}
+              </span>
+
+              {/* Title */}
+              <h3 className="font-serif text-2xl md:text-3xl font-semibold text-foreground tracking-tight col-span-2 md:col-span-1 -mt-1 md:mt-0">
+                {item.title}
+              </h3>
+
+              {/* Message */}
+              <p className="text-base md:text-lg leading-relaxed text-muted-foreground font-serif italic col-span-2 md:col-span-1">
+                "{item.msg}"
+              </p>
             </motion.div>
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="text-center mt-16"
+        >
+          <p className="text-xs tracking-[0.3em] text-[#B8985A]">THANK YOU</p>
+        </motion.div>
       </div>
     </section>
   );
