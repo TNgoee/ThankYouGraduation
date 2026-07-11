@@ -1,6 +1,6 @@
 import express, { type Express, type Request, type Response, type NextFunction } from "express";
 import cors from "cors";
-import { type Options, pinoHttp } from "pino-http";
+import pinoHttp, { type Options } from "pino-http";
 import router from "./routes";
 import { logger } from "./lib/logger";
 
