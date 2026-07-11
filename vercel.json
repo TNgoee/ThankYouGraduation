@@ -1,5 +1,11 @@
 {
     "buildCommand": "cd /vercel/path0/artifacts/api-server && pnpm run build",
     "outputDirectory": "/vercel/path0/artifacts/api-server/dist",
-    "installCommand": "pnpm install"
+    "installCommand": "pnpm install",
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/index.mjs"
+        }
+    ]
 }
